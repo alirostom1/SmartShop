@@ -22,4 +22,7 @@ public class User extends Auditable{
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private UserRole role = UserRole.CLIENT;
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Client client;
 }
