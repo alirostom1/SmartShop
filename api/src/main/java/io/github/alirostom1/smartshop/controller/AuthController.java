@@ -1,5 +1,7 @@
 package io.github.alirostom1.smartshop.controller;
 
+import io.github.alirostom1.smartshop.annotation.AuthN;
+import io.github.alirostom1.smartshop.annotation.AuthZ;
 import io.github.alirostom1.smartshop.dto.request.LoginRequest;
 import io.github.alirostom1.smartshop.dto.response.common.ApiResponse;
 import io.github.alirostom1.smartshop.dto.response.user.UserPublicResponse;
@@ -36,6 +38,7 @@ public class AuthController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @AuthN
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest request,HttpSession session){
         session.invalidate();
