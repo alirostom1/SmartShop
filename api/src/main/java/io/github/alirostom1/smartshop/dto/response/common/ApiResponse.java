@@ -6,13 +6,14 @@ import lombok.Getter;
 
 import java.util.List;
 
-@Builder
+@Builder()
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
     private boolean success;
     private String message;
     private T data;
+    @Builder.Default
     private Long timestamp = System.currentTimeMillis();
     private String path;
     private Integer status;
