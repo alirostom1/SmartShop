@@ -115,7 +115,7 @@ public class ClientController{
     }
 
 
-    @AuthZ("#user.role.name() == 'ADMIN'")
+    @AuthZ("#user.role.name() == 'CLIENT'")
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<ClientPublicResponse>> me(
             HttpServletRequest request,
