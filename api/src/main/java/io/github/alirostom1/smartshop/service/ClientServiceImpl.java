@@ -85,6 +85,7 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ClientPublicResponse getClientPublic(Long id) {
         Client client = clientRepository.findByUser_Id(id)
                 .orElseThrow(() -> new RessourceNotFoundException("Client doesn't exist anymore!"));
