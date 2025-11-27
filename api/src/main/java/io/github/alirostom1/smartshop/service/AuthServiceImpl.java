@@ -1,10 +1,8 @@
 package io.github.alirostom1.smartshop.service;
 
-import io.github.alirostom1.smartshop.dto.request.LoginRequest;
-import io.github.alirostom1.smartshop.dto.response.user.UserPublicResponse;
+import io.github.alirostom1.smartshop.dto.request.auth.LoginRequest;
 import io.github.alirostom1.smartshop.exception.AuthenticationException;
 import io.github.alirostom1.smartshop.model.entity.User;
-import io.github.alirostom1.smartshop.model.mapper.UserMapper;
 import io.github.alirostom1.smartshop.repository.UserRepository;
 import io.github.alirostom1.smartshop.util.BCryptPasswordEncoder;
 import lombok.RequiredArgsConstructor;

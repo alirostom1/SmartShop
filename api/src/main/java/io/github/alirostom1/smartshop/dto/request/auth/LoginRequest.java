@@ -1,4 +1,4 @@
-package io.github.alirostom1.smartshop.dto.request;
+package io.github.alirostom1.smartshop.dto.request.auth;
 
 import jakarta.validation.constraints.NotBlank;
 

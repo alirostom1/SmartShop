@@ -1,11 +1,9 @@
 package io.github.alirostom1.smartshop.controller;
 
 import io.github.alirostom1.smartshop.annotation.AuthN;
-import io.github.alirostom1.smartshop.annotation.AuthZ;
-import io.github.alirostom1.smartshop.dto.request.LoginRequest;
+import io.github.alirostom1.smartshop.dto.request.auth.LoginRequest;
 import io.github.alirostom1.smartshop.dto.response.common.ApiResponse;
 import io.github.alirostom1.smartshop.dto.response.user.UserPublicResponse;
-import io.github.alirostom1.smartshop.enums.UserRole;
 import io.github.alirostom1.smartshop.model.entity.User;
 import io.github.alirostom1.smartshop.model.mapper.UserMapper;
 import io.github.alirostom1.smartshop.service.AuthService;
@@ -24,7 +22,10 @@ public class AuthController {
     private final UserMapper userMapper;
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<UserPublicResponse>> login(@Valid @RequestBody LoginRequest request, HttpServletRequest servletRequest, HttpSession session) {
+    public ResponseEntity<ApiResponse<UserPublicResponse>> login(
+            @Valid @RequestBody LoginRequest request,
+            HttpServletRequest servletRequest,
+            HttpSession session) {
         User user = authService.login(request);
         session.setAttribute("user", user);
         UserPublicResponse response = userMapper.entityToPublicResponse(user);

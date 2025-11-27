@@ -23,6 +23,6 @@ public class User extends Auditable{
     @Builder.Default
     private UserRole role = UserRole.CLIENT;
 
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToOne(mappedBy = "user")
     private Client client;
 }
