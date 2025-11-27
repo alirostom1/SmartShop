@@ -161,6 +161,28 @@ public class GlobalExceptionHandler{
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse);
     }
+    @ExceptionHandler(ProductReferenceExistsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUsernameAlreadyExistsException(
+            ProductReferenceExistsException ex,HttpServletRequest request){
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .success(false)
+                .status(409)
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse);
+    }
+    @ExceptionHandler(InvalidUUIDException.class)
+    public ResponseEntity<ApiResponse<Void>> handleInvalidUUIDException(
+            InvalidUUIDException ex,HttpServletRequest request){
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .success(false)
+                .status(400)
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+    }
 
 
 
