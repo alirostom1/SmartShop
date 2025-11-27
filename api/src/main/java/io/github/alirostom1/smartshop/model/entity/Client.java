@@ -13,14 +13,16 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 public class Client extends Auditable{
+    @Column(nullable = false,unique = true)
     private String companyName;
+    @Column(nullable = false,unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
     private ClientTier tier = ClientTier.BASIC;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id",unique = true,nullable = false)
     private User user;
 }
