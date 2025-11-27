@@ -116,10 +116,58 @@ public class GlobalExceptionHandler{
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(apiResponse);
     }
 
+    @ExceptionHandler(RessourceNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleRessourceNotFoundException(
+            RessourceNotFoundException ex,HttpServletRequest request){
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .success(false)
+                .status(404)
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleEmailAlreadyExistsException(
+            EmailAlreadyExistsException ex,HttpServletRequest request){
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .success(false)
+                .status(409)
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse);
+    }
+    @ExceptionHandler(CompanyNameAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleCompanyNameAlreadyExistsException(
+            CompanyNameAlreadyExistsException ex,HttpServletRequest request){
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .success(false)
+                .status(409)
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse);
+    }
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUsernameAlreadyExistsException(
+            UsernameAlreadyExistsException ex,HttpServletRequest request){
+        ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
+                .success(false)
+                .status(409)
+                .message(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse);
+    }
+
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGenericExceptions(
             Exception ex,HttpServletRequest request){
+        ex.printStackTrace();
         ApiResponse<Void> apiResponse = ApiResponse.<Void>builder()
                 .success(false)
                 .message("internal server error, please try again later!")
