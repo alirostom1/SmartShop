@@ -77,6 +77,7 @@ public class OrderServiceImpl implements OrderService{
         });
         order.setStatus(OrderStatus.CONFIRMED);
         Order savedOrder = orderRepository.save(order);
+        recalculateClientTier(order.getClient());
         return orderMapper.orderToInternalResponse(savedOrder);
     }
 
@@ -87,11 +88,7 @@ public class OrderServiceImpl implements OrderService{
         if(order.getStatus() != OrderStatus.PENDING){
             throw new BusinessException("Only Pending orders can be cancelled!");
         }
-        order.getItems().forEach(oi -> {
-            Product product = oi.getProduct();
-            product.releaseReservation(oi.getQuantity());
-            productRepository.save(product);
-        });
+        releaseReservedStock(order.getItems());
         order.setStatus(OrderStatus.CANCELED);
         Order savedOrder = orderRepository.save(order);
         return orderMapper.orderToInternalResponse(savedOrder);
@@ -221,5 +218,18 @@ public class OrderServiceImpl implements OrderService{
             product.releaseReservation(oi.getQuantity());
             productRepository.save(product);
         });
+    }
+
+    public void recalculateClientTier(Client client){
+        Long totalOrders = orderRepository.countOrdersByClientAndStatus(client,OrderStatus.CONFIRMED);
+        BigDecimal totalSpent = orderRepository.sumTotalTTCByClientAndStatus(client,OrderStatus.CONFIRMED);
+        ClientTier newTier = totalOrders >= 20 || totalSpent.compareTo(BigDecimal.valueOf(15000)) >= 0 ? ClientTier.PLATINUM
+                : totalOrders >= 10 || totalSpent.compareTo(BigDecimal.valueOf(5000)) >= 0 ? ClientTier.GOLD
+                : totalOrders >= 3 || totalSpent.compareTo(BigDecimal.valueOf(1000)) >= 0 ? ClientTier.SILVER
+                :ClientTier.BASIC;
+        if(newTier != client.getTier()){
+            client.setTier(newTier);
+            clientRepository.save(client);
+        }
     }
 }
