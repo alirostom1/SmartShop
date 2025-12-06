@@ -1,5 +1,6 @@
 package io.github.alirostom1.smartshop.model.entity;
 
+import io.github.alirostom1.smartshop.exception.InsufficientStockException;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +19,9 @@ import java.util.UUID;
 @Table(name = "products")
 @SoftDelete
 public class Product extends Auditable{
+
+    @Version
+    private Integer version;
 
     @Column(nullable = false,unique = true,updatable = false)
     @Builder.Default
@@ -40,4 +44,31 @@ public class Product extends Auditable{
     @Column(nullable = false)
     private Integer stock;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Integer reservedStock = 0;
+
+    public Integer getAvailableStock(){
+        return stock - reservedStock;
+    }
+
+    public void reserveStock(Integer quantity){
+        if(getAvailableStock() < quantity){
+            throw new InsufficientStockException("Insufficient available stock");
+        }
+        this.reservedStock += quantity;
+    }
+    public void releaseReservation(Integer quantity){
+        if(this.reservedStock < quantity){
+            throw new InsufficientStockException("Cannot release more than reserved !");
+        }
+        this.reservedStock -= quantity;
+    }
+    public void confirmReservation(Integer quantity){
+        releaseReservation(quantity);
+        if(this.stock < quantity){
+            throw new InsufficientStockException("Insufficient stock !");
+        }
+        this.stock -= quantity;
+    }
 }
