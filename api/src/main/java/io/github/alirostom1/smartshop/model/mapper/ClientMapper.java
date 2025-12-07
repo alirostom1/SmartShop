@@ -4,6 +4,8 @@ import io.github.alirostom1.smartshop.dto.request.client.CreateClientRequest;
 import io.github.alirostom1.smartshop.dto.request.client.UpdateClientRequest;
 import io.github.alirostom1.smartshop.dto.response.client.ClientInternalResponse;
 import io.github.alirostom1.smartshop.dto.response.client.ClientPublicResponse;
+import io.github.alirostom1.smartshop.dto.response.client.ClientWithStatsInternalResponse;
+import io.github.alirostom1.smartshop.dto.response.client.ClientWithStatsPublicResponse;
 import io.github.alirostom1.smartshop.model.entity.Client;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,6 +17,11 @@ public interface ClientMapper{
     ClientInternalResponse entityToInternalResponse(Client client);
     @Mapping(target = "loginInfo" ,source = "user")
     ClientPublicResponse entityToPublicResponse(Client client);
+
+    @Mapping(target = "loginInfo" ,source = "user")
+    ClientWithStatsInternalResponse entityToStatsInternalResponse(Client client);
+    @Mapping(target = "loginInfo" ,source = "user")
+    ClientWithStatsPublicResponse entityToStatsPublicResponse(Client client);
 
     @Mapping(target = "user.username",source = "username")
     Client requestToEntity(CreateClientRequest request);

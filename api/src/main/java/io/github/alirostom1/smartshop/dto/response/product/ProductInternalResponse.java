@@ -17,4 +17,6 @@ public class ProductInternalResponse extends BaseInternalResponse {
     private String description;
     private BigDecimal unitPrice;
     private Integer stock;
+    private Integer reservedStock;
+
 }

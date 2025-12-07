@@ -6,6 +6,8 @@ import io.github.alirostom1.smartshop.dto.request.client.CreateClientRequest;
 import io.github.alirostom1.smartshop.dto.request.client.UpdateClientRequest;
 import io.github.alirostom1.smartshop.dto.response.client.ClientInternalResponse;
 import io.github.alirostom1.smartshop.dto.response.client.ClientPublicResponse;
+import io.github.alirostom1.smartshop.dto.response.client.ClientWithStatsInternalResponse;
+import io.github.alirostom1.smartshop.dto.response.client.ClientWithStatsPublicResponse;
 import io.github.alirostom1.smartshop.dto.response.common.ApiResponse;
 import io.github.alirostom1.smartshop.model.entity.Client;
 import io.github.alirostom1.smartshop.model.entity.User;
@@ -113,6 +115,22 @@ public class ClientController{
                 .build();
         return ResponseEntity.ok().body(apiResponse);
     }
+    @GetMapping("/{id}/stats")
+    @AuthZ("#user.role.name() == 'ADMIN'")
+    public ResponseEntity<ApiResponse<ClientWithStatsInternalResponse>> getClientWithStats(
+            @PathVariable Long id,
+            HttpServletRequest request
+    ){
+        ClientWithStatsInternalResponse response = clientService.getClientWithStats(id);
+        ApiResponse<ClientWithStatsInternalResponse> apiResponse = ApiResponse.<ClientWithStatsInternalResponse>builder()
+                .success(true)
+                .status(200)
+                .message("Client retrieved successfully!")
+                .path(request.getRequestURI())
+                .data(response)
+                .build();
+        return ResponseEntity.ok(apiResponse);
+    }
 
 
     @AuthZ("#user.role.name() == 'CLIENT'")
@@ -127,6 +145,23 @@ public class ClientController{
                 .status(200)
                 .path(request.getRequestURI())
                 .message("Successfully retrieved client!")
+                .data(response)
+                .build();
+        return ResponseEntity.ok().body(apiResponse);
+    }
+
+    @AuthZ("#user.role.name() == 'CLIENT'")
+    @GetMapping("/me/stats")
+    public ResponseEntity<ApiResponse<ClientWithStatsPublicResponse>> meWithStats(
+            HttpServletRequest request,
+            HttpSession session
+    ){
+        ClientWithStatsPublicResponse response = clientService.getClientPublicWithStats(((User)session.getAttribute("user")).getId());
+        ApiResponse<ClientWithStatsPublicResponse> apiResponse = ApiResponse.<ClientWithStatsPublicResponse>builder()
+                .success(true)
+                .status(200)
+                .path(request.getRequestURI())
+                .message("Successfully retrieved your details with statistics!")
                 .data(response)
                 .build();
         return ResponseEntity.ok().body(apiResponse);
