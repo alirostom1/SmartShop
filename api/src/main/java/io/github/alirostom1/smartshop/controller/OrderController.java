@@ -111,7 +111,7 @@ public class OrderController {
         return ResponseEntity.ok(apiResponse);
     }
     @AuthZ("#user.role.name() == 'ADMIN'")
-    @GetMapping("/{clientId}")
+    @GetMapping("/client/{clientId}")
     public ResponseEntity<ApiResponse<Page<OrderInternalResponse>>> getOrdersByClient(
             @PageableDefault(page = 0, size = 5,sort = "createdAt",direction = Sort.Direction.DESC)
             Pageable pageable,
@@ -129,7 +129,7 @@ public class OrderController {
         return ResponseEntity.ok(apiResponse);
     }
     @AuthZ("#user.role.name() == 'ADMIN'")
-    @GetMapping("/{status}")
+    @GetMapping("/status/{status}")
     public ResponseEntity<ApiResponse<Page<OrderInternalResponse>>> getOrdersByStatus(
             @PageableDefault(page = 0, size = 5,sort = "createdAt",direction = Sort.Direction.DESC)
             Pageable pageable,

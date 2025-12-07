@@ -163,9 +163,9 @@ public class OrderServiceImpl implements OrderService{
     }
     private BigDecimal getLoyaltyDiscountThreshold(ClientTier clientTier){
         return clientTier.equals(ClientTier.BASIC) ? BigDecimal.ZERO
-                : clientTier.equals(ClientTier.SILVER) ? BigDecimal.valueOf(500)
-                : clientTier.equals(ClientTier.GOLD) ? BigDecimal.valueOf(800)
-                : clientTier.equals(ClientTier.PLATINUM) ? BigDecimal.valueOf(1200)
+                : clientTier.equals(ClientTier.SILVER) ? BigDecimal.valueOf(500L)
+                : clientTier.equals(ClientTier.GOLD) ? BigDecimal.valueOf(800L)
+                : clientTier.equals(ClientTier.PLATINUM) ? BigDecimal.valueOf(1200L)
                 : BigDecimal.ZERO;
     }
     private BigDecimal validatePromoCode(String promoCode){
@@ -223,9 +223,9 @@ public class OrderServiceImpl implements OrderService{
     public void recalculateClientTier(Client client){
         Long totalOrders = orderRepository.countOrdersByClientAndStatus(client,OrderStatus.CONFIRMED);
         BigDecimal totalSpent = orderRepository.sumTotalTTCByClientAndStatus(client,OrderStatus.CONFIRMED);
-        ClientTier newTier = totalOrders >= 20 || totalSpent.compareTo(BigDecimal.valueOf(15000)) >= 0 ? ClientTier.PLATINUM
-                : totalOrders >= 10 || totalSpent.compareTo(BigDecimal.valueOf(5000)) >= 0 ? ClientTier.GOLD
-                : totalOrders >= 3 || totalSpent.compareTo(BigDecimal.valueOf(1000)) >= 0 ? ClientTier.SILVER
+        ClientTier newTier = totalOrders >= 20L || totalSpent.compareTo(BigDecimal.valueOf(15000L)) >= 0 ? ClientTier.PLATINUM
+                : totalOrders >= 10L || totalSpent.compareTo(BigDecimal.valueOf(5000L)) >= 0 ? ClientTier.GOLD
+                : totalOrders >= 3L || totalSpent.compareTo(BigDecimal.valueOf(1000L)) >= 0 ? ClientTier.SILVER
                 :ClientTier.BASIC;
         if(newTier != client.getTier()){
             client.setTier(newTier);

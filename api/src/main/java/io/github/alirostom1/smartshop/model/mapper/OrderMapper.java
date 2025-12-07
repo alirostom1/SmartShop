@@ -16,6 +16,7 @@ public interface OrderMapper {
     OrderItemPublicResponse orderItemToPublicResponse(OrderItem orderItem);
     OrderItemInternalResponse orderItemToInternalResponse(OrderItem orderItem);
 
+    @Mapping(target = "placedAt",source = "createdAt")
     OrderPublicResponse orderToPublicResponse(Order order);
     OrderInternalResponse orderToInternalResponse(Order order);
 
