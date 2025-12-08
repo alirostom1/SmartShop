@@ -10,7 +10,7 @@ import io.github.alirostom1.smartshop.model.entity.OrderItem;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring",uses = ClientMapper.class)
+@Mapper(componentModel = "spring",uses = {ClientMapper.class,PaymentMapper.class})
 public interface OrderMapper {
 
     OrderItemPublicResponse orderItemToPublicResponse(OrderItem orderItem);
