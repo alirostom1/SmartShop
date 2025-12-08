@@ -4,11 +4,13 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 
 @Getter @Setter
 @NoArgsConstructor
+@SuperBuilder
 public class UpdateProductRequest{
     @NotBlank(message = "Product name is required")
     @Size(max = 100, message = "Product name must not exceed 100 characters")

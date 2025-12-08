@@ -1,15 +1,18 @@
 package io.github.alirostom1.smartshop.dto.request.product;
 
 import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@SuperBuilder
 public class CreateProductRequest {
     @NotBlank(message = "Product name is required")
     @Size(max = 100, message = "Product name must not exceed 100 characters")
