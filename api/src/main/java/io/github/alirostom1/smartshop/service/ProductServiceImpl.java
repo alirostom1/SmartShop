@@ -51,13 +51,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long id) {
         Product product = getProductEntity(id);
-        productRepository.delete(product);
+        product.setDeleted(true);
+        productRepository.save(product);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<ProductInternalResponse> getAllProducts(Pageable pageable) {
-        Page<Product> products = productRepository.findAll(pageable);
+        Page<Product> products = productRepository.findByDeletedFalse(pageable);
         return products.map(productMapper::entityToInternalResponse);
     }
 
@@ -79,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public ProductInternalResponse getProductByReference(String reference) {
-        Product product = productRepository.findByReference(reference)
+        Product product = productRepository.findByReferenceAndDeletedFalse(reference)
                 .orElseThrow(() -> new RessourceNotFoundException("Product not found with reference: " + reference));
         return productMapper.entityToInternalResponse(product);
     }
@@ -87,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public Page<ProductPublicResponse> getAllProductsPublic(Pageable pageable) {
-        Page<Product> products = productRepository.findAll(pageable);
+        Page<Product> products = productRepository.findByDeletedFalse(pageable);
         return products.map(productMapper::entityToPublicResponse);
     }
 
@@ -102,7 +103,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public ProductPublicResponse getProductPublic(UUID publicId) {
-        Product product = productRepository.findByPublicId(publicId)
+        Product product = productRepository.findByPublicIdAndDeletedFalse(publicId)
                 .orElseThrow(() -> new RessourceNotFoundException("Product not found"));
         return productMapper.entityToPublicResponse(product);
     }
@@ -110,19 +111,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional(readOnly = true)
     public ProductPublicResponse getProductByReferencePublic(String reference) {
-        Product product = productRepository.findByReference(reference)
+        Product product = productRepository.findByReferenceAndDeletedFalse(reference)
                 .orElseThrow(() -> new RessourceNotFoundException("Product not found with reference: " + reference));
         return productMapper.entityToPublicResponse(product);
     }
 
     // Private helper methods
     private Product getProductEntity(Long id) {
-        return productRepository.findById(id)
+        return productRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> new RessourceNotFoundException("Product not found with id: " + id));
     }
 
     private void validateProductCreation(CreateProductRequest request) {
-        if (productRepository.existsByReference(request.getReference())) {
+        if (productRepository.existsByReferenceAndDeletedFalse(request.getReference())) {
             throw new ProductReferenceExistsException("Product reference already exists: " + request.getReference());
         }
     }

@@ -176,6 +176,9 @@ public class OrderServiceImpl implements OrderService{
         if(!StringUtils.hasText(promoCode)){
             return BigDecimal.ZERO;
         }
+        if(orderRepository.existsByPromoCode(promoCode)){
+            throw new BusinessException("Promo code expired!");
+        }
         return BigDecimal.valueOf(0.05);
     }
     private BigDecimal calculateDiscount(BigDecimal subTotal,BigDecimal loyaltyDisountRate,BigDecimal promoDiscountRate){
