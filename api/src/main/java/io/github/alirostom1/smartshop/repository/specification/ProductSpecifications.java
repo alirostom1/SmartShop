@@ -37,11 +37,15 @@ public class ProductSpecifications{
     public static Specification<Product> isActive() {
         return (root, query, criteriaBuilder) -> criteriaBuilder.conjunction();
     }
+    public static Specification<Product> isNotDeleted(){
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("deleted"),false);
+    }
 
     public static Specification<Product> withFilters(FilterProductsRequest filter){
         return Specification.where(containsName(filter.getName()))
                 .and(hasCategory(filter.getCategory()))
                 .and(priceBetween(filter.getMinPrice(),filter.getMaxPrice()))
-                .and(filter.getInStockOnly() ? hasStock() : isActive());
+                .and(filter.getInStockOnly() ? hasStock() : isActive())
+                .and(isNotDeleted());
     }
 }

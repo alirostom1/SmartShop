@@ -3,6 +3,7 @@ package io.github.alirostom1.smartshop.dto.response.order;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.github.alirostom1.smartshop.dto.response.client.ClientInternalResponse;
 import io.github.alirostom1.smartshop.dto.response.common.BaseInternalResponse;
+import io.github.alirostom1.smartshop.dto.response.payment.PaymentInternalResponse;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -38,4 +39,5 @@ public class OrderInternalResponse extends BaseInternalResponse{
     private BigDecimal remainingAmount;
     private String promoCode;
     private List<OrderItemInternalResponse> items;
+    private List<PaymentInternalResponse> payments;
 }

@@ -8,16 +8,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 public interface OrderRepository extends JpaRepository<Order,Long>{
     //INTERNAL
     Page<Order> findByClient_Id(Long clientId, Pageable pageable);
     Page<Order> findByStatus(OrderStatus status,Pageable pageable);
+
+    boolean existsByPromoCode(String promoCode);
 
     //PUBLIC
     Page<Order> findByClient_User_Id(Long userId,Pageable pageable);

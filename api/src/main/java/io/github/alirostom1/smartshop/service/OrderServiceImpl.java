@@ -7,6 +7,7 @@ import io.github.alirostom1.smartshop.dto.response.order.OrderInternalResponse;
 import io.github.alirostom1.smartshop.dto.response.order.OrderPublicResponse;
 import io.github.alirostom1.smartshop.enums.ClientTier;
 import io.github.alirostom1.smartshop.enums.OrderStatus;
+import io.github.alirostom1.smartshop.enums.PaymentStatus;
 import io.github.alirostom1.smartshop.exception.AccessDeniedException;
 import io.github.alirostom1.smartshop.exception.BusinessException;
 import io.github.alirostom1.smartshop.exception.RessourceNotFoundException;
@@ -71,6 +72,9 @@ public class OrderServiceImpl implements OrderService{
         }
         if(order.getRemainingAmount().compareTo(BigDecimal.ZERO) > 0){
             throw new BusinessException("Order must be fully paid before confirmation!");
+        }
+        if(!order.getPayments().stream().allMatch(payment -> payment.getStatus() != PaymentStatus.PENDING)){
+            throw new BusinessException("All order payments should be deposited before confirmation!");
         }
         order.getItems().forEach(oi -> {
             oi.getProduct().confirmReservation(oi.getQuantity());
@@ -171,6 +175,9 @@ public class OrderServiceImpl implements OrderService{
     private BigDecimal validatePromoCode(String promoCode){
         if(!StringUtils.hasText(promoCode)){
             return BigDecimal.ZERO;
+        }
+        if(orderRepository.existsByPromoCode(promoCode)){
+            throw new BusinessException("Promo code expired!");
         }
         return BigDecimal.valueOf(0.05);
     }

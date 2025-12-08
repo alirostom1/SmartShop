@@ -7,7 +7,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.SoftDelete;
+import org.hibernate.annotations.SoftDeleteType;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -17,7 +20,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @SuperBuilder
 @Table(name = "products")
-@SoftDelete
 public class Product extends Auditable{
 
     @Version
@@ -43,6 +45,10 @@ public class Product extends Auditable{
 
     @Column(nullable = false)
     private Integer stock;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean deleted = false;
 
     @Column(nullable = false)
     @Builder.Default
